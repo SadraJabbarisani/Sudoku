@@ -1,6 +1,6 @@
-#include <iostream>   // for input and output stream
-#include <cstdlib>    // for random numbers
-#include <ctime>      // for random numbers
+#include <iostream> // for input and output stream
+#include <cstdlib>	// for random numbers
+#include <ctime>	// for random numbers
 
 using namespace std;
 
@@ -8,7 +8,7 @@ using namespace std;
 
 namespace PSu
 {
-	int sudoku[9][9] = { 0 };
+	int sudoku[9][9] = {0};
 	int g = 0;
 
 	int i, j, num;
@@ -16,10 +16,10 @@ namespace PSu
 
 namespace SSu
 {
-	int sudoku[9][9] = { 0 };
+	int sudoku[9][9] = {0};
 }
 
-//Declaring functions:
+// Declaring functions:
 void tableMaker(int nCount, int srandI);
 void showTable(int sudoku[9][9], char D);
 bool isOk(int table[9][9], int row, int col, int num);
@@ -70,8 +70,10 @@ start:
 
 bool isComplete()
 {
-	for (int j = 0; j < 9; j++) {
-		for (int i = 0; i < 9; i++) {
+	for (int j = 0; j < 9; j++)
+	{
+		for (int i = 0; i < 9; i++)
+		{
 			if (PSu::sudoku[j][i] == 0)
 			{
 				return false;
@@ -85,27 +87,29 @@ void CAP() // Check And Place
 {
 	if (PSu::sudoku[PSu::j - 1][PSu::i - 1] != 0)
 	{
-		cout << "\x1B[31mWRONG:\033[0m" << "There is already a number!" << '\n'
-			<< "Please choose another please.";
-		//return false;
+		cout << "\x1B[31mWRONG:\033[0m"
+			 << "There is already a number!" << '\n'
+			 << "Please choose another please.";
+		// return false;
 	}
 	else if (!isOk(PSu::sudoku, PSu::j - 1, PSu::i - 1, PSu::num))
 	{
-		cout << "\x1B[31mWRONG:\033[0m" << "same number in the same row, column or subtable!" << '\n'
-			<< "Please choose another please.";
-		//return false;
+		cout << "\x1B[31mWRONG:\033[0m"
+			 << "same number in the same row, column or subtable!" << '\n'
+			 << "Please choose another please.";
+		// return false;
 	}
 	else if (SSu::sudoku[PSu::j - 1][PSu::i - 1] != PSu::num)
 	{
 		cout << "\x1B[31mWRONG!\033[0m" << '\n';
-		//return false;
+		// return false;
 	}
 
 	if (SSu::sudoku[PSu::j - 1][PSu::i - 1] == PSu::num)
 	{
 		cout << "\x1B[32mCORRECT!\033[0m" << '\n';
 		PSu::sudoku[PSu::j - 1][PSu::i - 1] = PSu::num;
-		//return true;
+		// return true;
 	}
 	cout << '\n';
 }
@@ -115,19 +119,38 @@ void getNumber()
 	cout << '\n';
 
 takei:
-	cout << "please enter Column (" << "\033[3;106;30mi\033[0m" << "): ";
+	cout << "please enter Column ("
+		 << "\033[3;106;30mi\033[0m"
+		 << "): ";
 	cin >> PSu::i;
-	if (9 < PSu::i || PSu::i < 1) { PSu::i = 0; cout << "The entered number MUST BE FROM '1' TO '9'" << endl; goto takei; }
+	if (9 < PSu::i || PSu::i < 1)
+	{
+		PSu::i = 0;
+		cout << "The entered number MUST BE FROM '1' TO '9'" << endl;
+		goto takei;
+	}
 
 takej:
-	cout << "please enter Row    (" << "\033[3;105;30mj\033[0m" << "): ";
+	cout << "please enter Row    ("
+		 << "\033[3;105;30mj\033[0m"
+		 << "): ";
 	cin >> PSu::j;
-	if (9 < PSu::j || PSu::j < 1) { PSu::j = 0; cout << "The entered number MUST BE FROM '1' TO '9'" << endl; goto takej; }
+	if (9 < PSu::j || PSu::j < 1)
+	{
+		PSu::j = 0;
+		cout << "The entered number MUST BE FROM '1' TO '9'" << endl;
+		goto takej;
+	}
 
 taken:
 	cout << "Enter the number you want to put there: ";
 	cin >> PSu::num;
-	if (9 < PSu::num || PSu::num < 1) { PSu::num = 0; cout << "The entered number MUST BE FROM '1' TO '9'" << endl; goto taken; }
+	if (9 < PSu::num || PSu::num < 1)
+	{
+		PSu::num = 0;
+		cout << "The entered number MUST BE FROM '1' TO '9'" << endl;
+		goto taken;
+	}
 }
 
 bool sudokuSolver(int sudoku[9][9])
@@ -135,19 +158,24 @@ bool sudokuSolver(int sudoku[9][9])
 	int row, col;
 	bool isEmpty = false;
 
-	for (row = 0; row < 9; row++) {
-		for (col = 0; col < 9; col++) {
-			if (sudoku[row][col] == 0) {
+	for (row = 0; row < 9; row++)
+	{
+		for (col = 0; col < 9; col++)
+		{
+			if (sudoku[row][col] == 0)
+			{
 				isEmpty = true;
 				break;
 			}
 		}
-		if (isEmpty) {
+		if (isEmpty)
+		{
 			break;
 		}
 	}
 
-	if (!isEmpty) {
+	if (!isEmpty)
+	{
 		return true;
 	}
 
@@ -156,7 +184,6 @@ bool sudokuSolver(int sudoku[9][9])
 		if (isOk(sudoku, row, col, num))
 		{
 			sudoku[row][col] = num;
-
 
 			if (sudokuSolver(sudoku))
 			{
@@ -172,47 +199,55 @@ bool sudokuSolver(int sudoku[9][9])
 
 void tableConvertor(int table1[9][9], int table2[9][9])
 {
-	for (int j = 0; j < 9; j++) {
-		for (int i = 0; i < 9; i++) {
+	for (int j = 0; j < 9; j++)
+	{
+		for (int i = 0; i < 9; i++)
+		{
 			table2[j][i] = table1[j][i];
 		}
 	}
 }
 
-void tableMaker(int NON, int srandI) //NON : number of numbers , srandI : srand Handle
+void tableMaker(int NON, int srandI) // NON : number of numbers , srandI : srand Handle
 {
-	//tableCleaner();
+	// tableCleaner();
 
 	int x = time(0);
 	srand(x + srandI);
 
 	int n = 17;
-	do {
+	do
+	{
 		int y = (rand() % 9);
 		int x = (rand() % 9);
 		int num = 1 + (rand() % 9);
 
-		if (isOk(PSu::sudoku, y, x, num) && PSu::sudoku[y][x] == 0) {
+		if (isOk(PSu::sudoku, y, x, num) && PSu::sudoku[y][x] == 0)
+		{
 			PSu::sudoku[y][x] = num;
 			n--;
 		}
 	} while (n > 0);
 
-	if (!sudokuSolver(PSu::sudoku)) {
+	if (!sudokuSolver(PSu::sudoku))
+	{
 		PSu::g++;
 		tableMaker(17, PSu::g);
 	}
-	else {
+	else
+	{
 		tableConvertor(PSu::sudoku, SSu::sudoku);
 	}
 
 randomdelet:
 	int w = tableNumbers - NON;
-	do {
+	do
+	{
 		int y = (rand() % 9);
 		int x = (rand() % 9);
 
-		if (PSu::sudoku[y][x] != 0) {
+		if (PSu::sudoku[y][x] != 0)
+		{
 			PSu::sudoku[y][x] = 0;
 			w--;
 		}
@@ -220,13 +255,12 @@ randomdelet:
 
 	if (!rowcolcheck(PSu::sudoku))
 	{
-		//PSu::g++;
+		// PSu::g++;
 		tableCleaner(PSu::sudoku);
 		tableConvertor(SSu::sudoku, PSu::sudoku);
-		//tableMaker(17, PSu::g);
+		// tableMaker(17, PSu::g);
 		goto randomdelet;
 	}
-
 }
 
 bool rowcolcheck(int sudoku[9][9])
@@ -234,29 +268,35 @@ bool rowcolcheck(int sudoku[9][9])
 	int RowColSum;
 
 	// col check
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 9; i++)
+	{
 		RowColSum = 0;
-		for (int j = 0; j < 9; j++) {
+		for (int j = 0; j < 9; j++)
+		{
 			RowColSum += sudoku[j][i];
 		}
-		if (RowColSum == 0) {
+		if (RowColSum == 0)
+		{
 			return false;
 		}
 	}
 
 	// row check
-	for (int j = 0; j < 9; j++) {
+	for (int j = 0; j < 9; j++)
+	{
 		RowColSum = 0;
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 9; i++)
+		{
 			RowColSum += sudoku[j][i];
 		}
-		if (RowColSum == 0) {
+		if (RowColSum == 0)
+		{
 			return false;
 		}
 	}
 
-	//subtable check
-	//for(int cs = 0; cs < 9; cs + 3)
+	// subtable check
+	// for(int cs = 0; cs < 9; cs + 3)
 	//{
 	//	for (int rs = 0; rs < 9; rs + 3)
 	//	{
@@ -272,15 +312,17 @@ bool rowcolcheck(int sudoku[9][9])
 	//			return false;
 	//		}
 	//	}
-	//}
+	// }
 
 	return true;
 }
 
 void tableCleaner(int sudoku[9][9])
 {
-	for (int j = 0; j < 9; j++) {
-		for (int i = 0; i < 9; i++) {
+	for (int j = 0; j < 9; j++)
+	{
+		for (int i = 0; i < 9; i++)
+		{
 			sudoku[j][i] = 0;
 		}
 	}
@@ -311,28 +353,37 @@ void showTable(int sudoku[9][9], char D)
 	}
 	cout << "==========================" << endl;
 	cout << "|                        |" << endl;
-	cout << "\x1B[33m|  " << "\033[2;105;30mj\033[0m" << "                     \x1B[33m|" << endl;
-	cout << "\x1B[33m| " << "\033[2;106;30mi= 1 2 3 4 5 6 7 8 9\033[0m" << "   \x1B[33m|" << endl;
+	cout << "\x1B[33m|  "
+		 << "\033[2;105;30mj\033[0m"
+		 << "                     \x1B[33m|" << endl;
+	cout << "\x1B[33m| "
+		 << "\033[2;106;30mi= 1 2 3 4 5 6 7 8 9\033[0m"
+		 << "   \x1B[33m|" << endl;
 
 	for (int j = 0; j < 9; j++)
 	{
-		cout << "|  " << "\033[2;105;30m" << j + 1 << "\033[0m" << " ";
+		cout << "|  "
+			 << "\033[2;105;30m" << j + 1 << "\033[0m"
+			 << " ";
 		for (int i = 0; i < 9; i++)
 		{
 			if ((i < 3 && j < 3) || (i < 3 && j > 5) || (i > 5 && j < 3) || (i > 5 && j > 5) || (2 < i && i < 6 && 2 < j && j < 6))
 			{
 				if (i == 2 || i == 8 || i == 5)
 				{
-					cout << "\033[2;47;35m" << sudoku[j][i] << "\033[0m" << " ";
+					cout << "\033[2;47;35m" << sudoku[j][i] << "\033[0m"
+						 << " ";
 				}
 				else
 				{
-					cout << "\033[2;47;35m" << sudoku[j][i] << " " << "\033[0m";
+					cout << "\033[2;47;35m" << sudoku[j][i] << " "
+						 << "\033[0m";
 				}
 			}
 			else
 			{
-				cout << "\033[0m" << sudoku[j][i] << " " << "\033[0m";
+				cout << "\033[0m" << sudoku[j][i] << " "
+					 << "\033[0m";
 			}
 		}
 		cout << "  \x1B[33m|" << endl;
@@ -360,9 +411,12 @@ bool isOk(int table[9][9], int row, int col, int num)
 
 	int rowBegin = row - row % 3;
 	int colBegin = col - col % 3;
-	for (int j = 0; j < 3; j++) {
-		for (int i = 0; i < 3; i++) {
-			if (table[j + rowBegin][i + colBegin] == num) {
+	for (int j = 0; j < 3; j++)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			if (table[j + rowBegin][i + colBegin] == num)
+			{
 				return false;
 			}
 		}
@@ -376,7 +430,8 @@ bool isOk(int table[9][9], int row, int col, int num)
 void Pcongratulations()
 {
 	system("cls");
-	cout << "log" << '\n' << '\n';
+	cout << "log" << '\n'
+		 << '\n';
 	cout << "\x1B[33m";
 	cout << "+------------------------+" << endl;
 	cout << "|                        |" << endl;
@@ -398,7 +453,8 @@ void Pcongratulations()
 
 void Pstrart()
 {
-	cout << "log" << '\n' << '\n';
+	cout << "log" << '\n'
+		 << '\n';
 	cout << "\x1B[33m";
 	cout << "+------------------------+" << endl;
 	cout << "|                        |" << endl;
@@ -429,7 +485,8 @@ void Pstrart()
 void PchooseDifficulty()
 {
 	system("cls");
-	cout << "log" << '\n' << '\n';
+	cout << "log" << '\n'
+		 << '\n';
 	cout << "\x1B[33m";
 	cout << "+------------------------+" << endl;
 	cout << "|                        |" << endl;
@@ -467,7 +524,8 @@ void play(int NON, char D)
 	tableCleaner(PSu::sudoku);
 	tableMaker(NON, PSu::g);
 	system("cls");
-	cout << "Start!" << '\n' << '\n';
+	cout << "Start!" << '\n'
+		 << '\n';
 	while (isComplete() == false)
 	{
 		showTable(PSu::sudoku, D);
@@ -477,7 +535,7 @@ void play(int NON, char D)
 	}
 	Pcongratulations();
 	cout << "Enter any char to continue";
-	char* ptr = new char;
+	char *ptr = new char;
 	cin >> *ptr;
 	delete ptr;
 }
