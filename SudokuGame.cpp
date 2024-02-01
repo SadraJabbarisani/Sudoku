@@ -6,7 +6,7 @@ using namespace std;
 
 #define tableNumbers 81
 
-namespace PSu
+namespace PSu // Playing Sudoku
 {
 	int sudoku[9][9] = {0};
 	int g = 0;
@@ -14,7 +14,7 @@ namespace PSu
 	int i, j, num;
 }
 
-namespace SSu
+namespace SSu // Saved Sudoku
 {
 	int sudoku[9][9] = {0};
 }
@@ -29,9 +29,11 @@ void tableConvertor(int table1[9][9], int table2[9][9]);
 bool sudokuSolver(int sudoku[9][9]);
 void getNumber();
 void CAP();
+void CAPfS(int i);
 bool isComplete();
 void play(int NON, char D);
 void callPlay();
+void solve();
 //-----------------------print functions------------------------
 void Pcongratulations();
 void Pstrart();
@@ -57,6 +59,10 @@ start:
 		goto start;
 
 	case 'b':
+		tableCleaner(PSu::sudoku);
+		tableCleaner(SSu::sudoku);
+		solve();
+		goto start;
 
 	case 'q':
 		cout << "have a nice day :)";
@@ -89,7 +95,7 @@ void CAP() // Check And Place
 	{
 		cout << "\x1B[31mWRONG:\033[0m"
 			 << "There is already a number!" << '\n'
-			 << "Please choose another please.";
+			 << "Please choose another place.";
 		// return false;
 	}
 	else if (!isOk(PSu::sudoku, PSu::j - 1, PSu::i - 1, PSu::num))
@@ -108,6 +114,32 @@ void CAP() // Check And Place
 	if (SSu::sudoku[PSu::j - 1][PSu::i - 1] == PSu::num)
 	{
 		cout << "\x1B[32mCORRECT!\033[0m" << '\n';
+		PSu::sudoku[PSu::j - 1][PSu::i - 1] = PSu::num;
+		// return true;
+	}
+	cout << '\n';
+}
+
+void CAPfS(int i) // Check And Place for Solve
+{
+	if (PSu::sudoku[PSu::j - 1][PSu::i - 1] != 0)
+	{
+		cout << "\x1B[31mWRONG:\033[0m"
+			 << "There is already a number!" << '\n'
+			 << "Please choose another place.";
+		// return false;
+	}
+	else if (!isOk(PSu::sudoku, PSu::j - 1, PSu::i - 1, PSu::num))
+	{
+		cout << "\x1B[31mWRONG:\033[0m"
+			 << "same number in the same row, column or subtable!" << '\n'
+			 << "Please choose another please.";
+		// return false;
+	}
+	else
+	{
+		cout << "Number of numbers entered: " << i << '\n'
+			 << "Minimum number of numbers to solve sudoku: 17";
 		PSu::sudoku[PSu::j - 1][PSu::i - 1] = PSu::num;
 		// return true;
 	}
@@ -295,25 +327,6 @@ bool rowcolcheck(int sudoku[9][9])
 		}
 	}
 
-	// subtable check
-	// for(int cs = 0; cs < 9; cs + 3)
-	//{
-	//	for (int rs = 0; rs < 9; rs + 3)
-	//	{
-	//		RowColSum = 0;
-	//		for (int j = 0; j < 3; j++)
-	//		{
-	//			for (int i = 0; i < 3; i++)
-	//			{
-	//				RowColSum += sudoku[j + cs][i + rs];
-	//			}
-	//		}
-	//		if (RowColSum == 0) {
-	//			return false;
-	//		}
-	//	}
-	// }
-
 	return true;
 }
 
@@ -339,7 +352,7 @@ void showTable(int sudoku[9][9], char D)
 	switch (D)
 	{
 	case 'E':
-		cout << "|    difficulty:\x1B[32mEezy\x1B[33m     |" << endl;
+		cout << "|    difficulty:\x1B[32mEesy\x1B[33m     |" << endl;
 		break;
 	case 'M':
 		cout << "|    difficulty:\033[36mMedium\x1B[33m   |" << endl;
@@ -350,6 +363,8 @@ void showTable(int sudoku[9][9], char D)
 	case 'J':
 		cout << "|    difficulty:\033[35m(JLLII)\x1B[33m  |" << endl;
 		break;
+	case 's':
+		cout << "|         \033[36mSolve\x1B[33m          |" << endl;
 	}
 	cout << "==========================" << endl;
 	cout << "|                        |" << endl;
@@ -498,7 +513,7 @@ void PchooseDifficulty()
 	cout << "|                        |" << endl;
 	cout << "|    \033[35mchoose one:\x1B[33m         |" << endl;
 	cout << "|                        |" << endl;
-	cout << "|        e.Eazy          |" << endl;
+	cout << "|        e.Easy          |" << endl;
 	cout << "|                        |" << endl;
 	cout << "|        m.Medium        |" << endl;
 	cout << "|                        |" << endl;
@@ -574,4 +589,75 @@ first:
 		cout << "invalid input!";
 		goto first;
 	}
+}
+
+//----------------------------------------------------------------
+
+void solve()
+{
+	system("cls");
+
+	cout << "Number of numbers entered: 0" << '\n'
+		 << "Minimum number of numbers to solve sudoku: 17" << '\n';
+	char *inputPtr = new char;
+	int i = 0;
+	bool stop = false;
+	while (i < 81)
+	{
+		showTable(PSu::sudoku, 's');
+		if (i > 16)
+		{
+			cout << "do you wanna continue? [y/n]: ";
+			cin >> *inputPtr;
+		reswitch:
+			switch (*inputPtr)
+			{
+			case 'y':
+				break;
+
+			case 'n':
+				stop = 1;
+				break;
+
+			default:
+				cout << '\n';
+				goto reswitch;
+			}
+		}
+		if (stop)
+			break;
+		getNumber();
+		i++;
+		system("cls");
+		CAPfS(i);
+	}
+	if (i == 81)
+	{
+		cout << "you solve the sudoku yourself!" << '\n';
+		showTable(PSu::sudoku, 's');
+		cout << "enter any thing to continue.";
+		cin >> *inputPtr;
+	}
+	else
+	{
+		system("cls");
+		cout << "soling";
+		if (sudokuSolver(PSu::sudoku))
+		{
+			system("cls");
+			cout << "solved!" << '\n'
+				 << '\n';
+			showTable(PSu::sudoku, 's');
+			cout << "enter any thing to continue.";
+			cin >> *inputPtr;
+		}
+		else
+		{
+			system("cls");
+			cout << "unfortunately your enterd table is Not solvable :(((";
+			cout << "enter any thing to continue.";
+			cin >> *inputPtr;
+		}
+	}
+	delete inputPtr;
 }
